@@ -1,0 +1,1528 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta name="description" content="Nurullah Şahin - Yazılım Mühendisliği Öğrencisi, Teknoloji Tutkunu, Yazılım Geliştirici">
+  <meta name="theme-color" content="#090c10">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Muhammed DURMUŞ - Yazılım Mühendisliği Öğrencisi</title>
+  
+  <!-- YENİ DEBUG KODU - inline olarak dil değiştirme fonksiyonu -->
+  <script>
+    console.log('HTML dosyasındaki inline dil değiştirme kodu');
+    document.addEventListener('DOMContentLoaded', function() {
+      // İlk YÜKLENDİĞİNDE BİR KEZ ÇALIŞIR
+      setTimeout(function() {
+        // Butonlara doğrudan tıklama işleyicileri ekle
+        const trBtn = document.querySelector('.nav-language-btn[data-lang="tr"]');
+        const enBtn = document.querySelector('.nav-language-btn[data-lang="en"]');
+        
+        console.log('DOĞRUDAN BUTONLAR:', trBtn, enBtn);
+        
+        // TR butonu
+        if (trBtn) {
+          trBtn.onclick = function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('TR butonu tıklandı - DOĞRUDAN HTML IÇINDEN');
+            
+            // Dil değiştirme işlevini gerçekleştir
+            if (typeof changeLanguage === 'function') {
+              changeLanguage('tr');
+            } else {
+              console.error('changeLanguage fonksiyonu bulunamadı');
+              alert('Dil değiştirme işlevi şu anda kullanılamıyor, sayfayı yenileyin.');
+            }
+            return false;
+          };
+        }
+        
+        // EN butonu
+        if (enBtn) {
+          enBtn.onclick = function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('EN butonu tıklandı - DOĞRUDAN HTML IÇINDEN');
+            
+            // Dil değiştirme işlevini gerçekleştir
+            if (typeof changeLanguage === 'function') {
+              changeLanguage('en');
+            } else {
+              console.error('changeLanguage fonksiyonu bulunamadı');
+              alert('Dil değiştirme işlevi şu anda kullanılamıyor, sayfayı yenileyin.');
+            }
+            return false;
+          };
+        }
+      }, 500);
+    });
+  </script>
+  
+  <style>
+    /* Minimum gerekli stiller - Yükleme Ekranı */
+    body {
+      margin: 0;
+      padding: 0;
+      background: #090c10;
+      opacity: 0;
+      transition: opacity 0.75s ease;
+      overflow-x: hidden;
+    }
+    body.loaded {
+      opacity: 1;
+    }
+    #splashScreen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: #090c10;
+      z-index: 100000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      transition: opacity 0.75s ease, visibility 0.75s ease;
+      overflow: hidden;
+      perspective: 1000px;
+    }
+    .splash-3d-container {
+      transform-style: preserve-3d;
+      animation: rotate3d 20s linear infinite;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      opacity: 0.2;
+    }
+    .splash-3d-plane {
+      position: absolute;
+      width: 250px;
+      height: 250px;
+      border: 1px solid rgba(242, 72, 11, 0.15);
+      border-radius: 5px;
+    }
+    .splash-3d-plane:nth-child(1) {
+      transform: rotateY(0deg) translateZ(200px);
+    }
+    .splash-3d-plane:nth-child(2) {
+      transform: rotateY(60deg) translateZ(200px);
+    }
+    .splash-3d-plane:nth-child(3) {
+      transform: rotateY(120deg) translateZ(200px);
+    }
+    .splash-3d-plane:nth-child(4) {
+      transform: rotateY(180deg) translateZ(200px);
+    }
+    .splash-3d-plane:nth-child(5) {
+      transform: rotateY(240deg) translateZ(200px);
+    }
+    .splash-3d-plane:nth-child(6) {
+      transform: rotateY(300deg) translateZ(200px);
+    }
+    @keyframes rotate3d {
+      0% {
+        transform: rotateX(5deg) rotateY(0deg);
+      }
+      100% {
+        transform: rotateX(5deg) rotateY(360deg);
+      }
+    }
+    .splash-particles {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+    .splash-particle {
+      position: absolute;
+      width: 5px;
+      height: 5px;
+      background: #f2480b;
+      border-radius: 50%;
+      opacity: 0.3;
+      animation: particles 3s linear infinite;
+    }
+    .splash-particle:nth-child(1) {
+      top: 20%;
+      left: 20%;
+      animation-delay: 0s;
+    }
+    .splash-particle:nth-child(2) {
+      top: 80%;
+      left: 40%;
+      animation-delay: 0.3s;
+    }
+    .splash-particle:nth-child(3) {
+      top: 40%;
+      left: 60%;
+      animation-delay: 0.7s;
+    }
+    .splash-particle:nth-child(4) {
+      top: 60%;
+      left: 80%;
+      animation-delay: 1s;
+    }
+    .splash-particle:nth-child(5) {
+      top: 30%;
+      left: 70%;
+      animation-delay: 1.3s;
+    }
+    .splash-particle:nth-child(6) {
+      top: 70%;
+      left: 20%;
+      animation-delay: 1.7s;
+    }
+    .splash-particle:nth-child(7) {
+      top: 50%;
+      left: 30%;
+      animation-delay: 2s;
+    }
+    .splash-particle:nth-child(8) {
+      top: 15%;
+      left: 60%;
+      animation-delay: 2.3s;
+    }
+    @keyframes particles {
+      0% {
+        transform: scale(1);
+        opacity: 0.3;
+      }
+      50% {
+        transform: scale(2);
+        opacity: 0.6;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 0.3;
+      }
+    }
+    .splash-logo-container {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(145deg, #0c1016, #060a0f);
+      box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.5),
+                 -10px -10px 20px rgba(25, 30, 40, 0.1);
+      margin-bottom: 30px;
+      animation: float 4s ease-in-out infinite, glow 3s ease-in-out infinite;
+      overflow: hidden;
+      z-index: 2;
+      transform-style: preserve-3d;
+      perspective: 500px;
+    }
+    .splash-logo-container::before {
+      content: "";
+      position: absolute;
+      width: 116px;
+      height: 116px;
+      border-radius: 50%;
+      background: #090c10;
+      z-index: 1;
+      transform: translateZ(-5px);
+    }
+    .splash-logo-container::after {
+      content: "";
+      position: absolute;
+      width: 150%;
+      height: 150%;
+      background: conic-gradient(from 90deg, transparent 50%, #f2480b 50%);
+      animation: rotateConic 2s linear infinite;
+      opacity: 0.8;
+      filter: blur(1px);
+    }
+    .splash-circle {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid rgba(242, 72, 11, 0.2);
+      animation: expandCircle 3s ease-in-out infinite;
+      opacity: 0;
+    }
+    .splash-circle:nth-child(1) {
+      width: 130px;
+      height: 130px;
+      animation-delay: 0s;
+    }
+    .splash-circle:nth-child(2) {
+      width: 150px;
+      height: 150px;
+      animation-delay: 0.5s;
+    }
+    .splash-circle:nth-child(3) {
+      width: 170px;
+      height: 170px;
+      animation-delay: 1s;
+    }
+    @keyframes expandCircle {
+      0% {
+        transform: scale(0.8);
+        opacity: 0;
+      }
+      50% {
+        opacity: 0.5;
+      }
+      100% {
+        transform: scale(1.2);
+        opacity: 0;
+      }
+    }
+    .splash-logo {
+      position: absolute;
+      color: #f2480b;
+      font-size: 30px;
+      font-weight: 900;
+      font-family: "Arial Black", Arial, sans-serif;
+      z-index: 2;
+      text-shadow: 0 0 15px rgba(242, 72, 11, 0.7);
+      letter-spacing: 1px;
+      animation: pulse 2s ease-in-out infinite;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+      transform: translateZ(10px);
+      -webkit-text-stroke: 1px rgba(242, 72, 11, 0.3);
+      text-align: center;
+      left: 0;
+      right: 0;
+      margin: 0 auto;
+    }
+    .splash-progress {
+      width: 150px;
+      height: 4px;
+      background: rgba(242, 72, 11, 0.1);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-top: 20px;
+      position: relative;
+      z-index: 2;
+      transform-style: preserve-3d;
+      perspective: 500px;
+      transform: rotateX(5deg);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    }
+    .splash-progress-bar {
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, #f2480b, #ff692e);
+      position: absolute;
+      top: 0;
+      left: 0;
+      border-radius: 4px;
+      box-shadow: 0 0 10px rgba(242, 72, 11, 0.5);
+      animation: progress 2.5s ease-in-out;
+      animation-fill-mode: forwards;
+    }
+    .splash-progress-percent {
+      position: absolute;
+      bottom: -24px;
+      font-size: 12px;
+      color: rgba(242, 72, 11, 0.8);
+      width: 100%;
+      text-align: center;
+      font-family: Arial, sans-serif;
+      opacity: 0.8;
+      animation: fadeInUp 0.5s ease-out 0.5s forwards, fadeOut 0.5s ease-in 2.5s forwards;
+      opacity: 0;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    }
+    .splash-text {
+      font-size: 14px;
+      color: rgba(242, 72, 11, 0.8);
+      margin-top: 45px;
+      font-family: Arial, sans-serif;
+      letter-spacing: 2px;
+      opacity: 0;
+      animation: fadeInText 0.5s ease-out 1s forwards;
+      z-index: 2;
+      position: relative;
+      font-weight: bold;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+      width: 100%;
+      text-align: center;
+      transform: none;
+      white-space: nowrap;
+      overflow: visible;
+    }
+    .splash-text::after {
+      content: "";
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(to right, transparent, rgba(242, 72, 11, 0.4), transparent);
+      animation: none;
+    }
+    @keyframes expandLine {
+      0% {
+        width: 0;
+        left: 50%;
+        opacity: 0;
+      }
+      50% {
+        width: 100%;
+        left: 0;
+        opacity: 1;
+      }
+      100% {
+        width: 0;
+        left: 50%;
+        opacity: 0;
+      }
+    }
+    @keyframes fadeInText {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes progress {
+      0% { width: 0; }
+      10% { width: 10%; }
+      30% { width: 40%; }
+      50% { width: 60%; }
+      70% { width: 75%; }
+      90% { width: 90%; }
+      100% { width: 100%; }
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeOut {
+      from { opacity: 1; }
+      to { opacity: 0; }
+    }
+    @keyframes rotateConic {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-6px); }
+      100% { transform: translateY(0px); }
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    @keyframes glow {
+      0% { box-shadow: 0 0 5px rgba(242, 72, 11, 0.3), 
+                      inset 0 0 5px rgba(242, 72, 11, 0.3); }
+      50% { box-shadow: 0 0 20px rgba(242, 72, 11, 0.7), 
+                       inset 0 0 10px rgba(242, 72, 11, 0.5); }
+      100% { box-shadow: 0 0 5px rgba(242, 72, 11, 0.3), 
+                        inset 0 0 5px rgba(242, 72, 11, 0.3); }
+    }
+    /* Mobil uyumluluk için ek stiller */
+    @media screen and (max-width: 480px) {
+      .splash-logo-container {
+        width: 100px;
+        height: 100px;
+        margin-bottom: 25px;
+      }
+      .splash-logo-container::before {
+        width: 96px;
+        height: 96px;
+      }
+      .splash-logo {
+        font-size: 28px;
+        font-weight: 900;
+      }
+      .splash-progress {
+        width: 120px;
+        height: 3px;
+        margin-top: 15px;
+      }
+      .splash-progress-percent {
+        font-size: 10px;
+        bottom: -20px;
+      }
+      .splash-circle:nth-child(1) {
+        width: 110px;
+        height: 110px;
+      }
+      .splash-circle:nth-child(2) {
+        width: 130px;
+        height: 130px;
+      }
+      .splash-circle:nth-child(3) {
+        width: 150px;
+        height: 150px;
+      }
+      .splash-text {
+        font-size: 12px;
+        margin-top: 30px;
+        letter-spacing: 1.5px;
+      }
+      .splash-particle {
+        width: 3px;
+        height: 3px;
+      }
+      .splash-3d-plane {
+        width: 150px;
+        height: 150px;
+      }
+      .splash-3d-plane:nth-child(1) {
+        transform: rotateY(0deg) translateZ(120px);
+      }
+      .splash-3d-plane:nth-child(2) {
+        transform: rotateY(60deg) translateZ(120px);
+      }
+      .splash-3d-plane:nth-child(3) {
+        transform: rotateY(120deg) translateZ(120px);
+      }
+      .splash-3d-plane:nth-child(4) {
+        transform: rotateY(180deg) translateZ(120px);
+      }
+      .splash-3d-plane:nth-child(5) {
+        transform: rotateY(240deg) translateZ(120px);
+      }
+      .splash-3d-plane:nth-child(6) {
+        transform: rotateY(300deg) translateZ(120px);
+      }
+      /* Animasyonlar mobil için optimize edildi */
+      @keyframes float {
+        0% { transform: translateY(0px); }
+        50% { transform: translateY(-6px); }
+        100% { transform: translateY(0px); }
+      }
+      @keyframes expandCircle {
+        0% {
+          transform: scale(0.9);
+          opacity: 0;
+        }
+        50% {
+          opacity: 0.4;
+        }
+        100% {
+          transform: scale(1.1);
+          opacity: 0;
+        }
+      }
+    }
+    
+    @media screen and (max-width: 320px) {
+      .splash-logo-container {
+        width: 90px;
+        height: 90px;
+        margin-bottom: 20px;
+      }
+      .splash-logo-container::before {
+        width: 86px;
+        height: 86px;
+      }
+      .splash-logo {
+        font-size: 24px;
+        font-weight: 900;
+      }
+      .splash-progress {
+        width: 100px;
+      }
+      .splash-text {
+        margin-top: 25px;
+        font-size: 11px;
+      }
+    }
+
+    /* Scroll İlerleme Çubuğu */
+    .scroll-progress-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: transparent;
+      z-index: 99999;
+    }
+    
+    .scroll-progress-bar {
+      height: 100%;
+      background: var(--primary-color);
+      width: 0%;
+      transition: width 0.1s ease;
+      box-shadow: 0 0 10px rgba(242, 72, 11, 0.5);
+    }
+
+    /* Fare İzleyici Efekti */
+    .cursor-follower {
+      position: fixed;
+      width: 20px;
+      height: 20px;
+      background: rgba(242, 72, 11, 0.5);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 99998;
+      opacity: 0;
+      transition: transform 0.1s ease, width 0.3s ease, height 0.3s ease, background 0.3s ease;
+      transform: translate(-50%, -50%);
+      mix-blend-mode: screen;
+      box-shadow: 0 0 15px rgba(242, 72, 11, 0.3);
+    }
+
+    /* Tıklama Splash Efekti */
+    .click-splash {
+      position: fixed;
+      pointer-events: none;
+      background: radial-gradient(circle, rgba(242, 72, 11, 0.6) 0%, rgba(242, 72, 11, 0) 70%);
+      border-radius: 50%;
+      z-index: 99997;
+      transform: translate(-50%, -50%) scale(0);
+      animation: clickSplash 0.8s ease-out forwards;
+    }
+
+    @keyframes clickSplash {
+      0% {
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 0.7;
+      }
+      100% {
+        transform: translate(-50%, -50%) scale(3);
+        opacity: 0;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <script src="script.js" defer></script>
+
+  <script>
+    // Geliştirilmiş yükleme ekranı kodu
+    document.addEventListener('DOMContentLoaded', function() {
+      // Sayfanın görünürlüğünü hazırlayalım
+      setTimeout(function() {
+        document.body.classList.add('loaded');
+      }, 300);
+      
+      // Hamburger menü doğrudan bağlantı
+      const hamburger = document.querySelector('.hamburger');
+      const body = document.body;
+      
+      if (hamburger) {
+        hamburger.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          body.classList.toggle('menu-open');
+          console.log('Hamburger tıklandı', body.classList.contains('menu-open'));
+        });
+      }
+
+      // Gerçekçi ve düzgün yükleme simülasyonu
+      const progressBar = document.querySelector('.splash-progress-bar');
+      const progressPercent = document.querySelector('.splash-progress-percent');
+      const loadingText = document.querySelector('.splash-text');
+      let percent = 0;
+      
+      // NS logosunu düzelt
+      const splashLogo = document.querySelector('.splash-logo');
+      if (splashLogo) {
+        splashLogo.style.position = "absolute";
+        splashLogo.style.top = "50%";
+        splashLogo.style.left = "50%";
+        splashLogo.style.transform = "translate(-50%, -50%)";
+        splashLogo.style.fontSize = "30px";
+        splashLogo.style.fontWeight = "900";
+        splashLogo.style.color = "#f2480b";
+        splashLogo.style.textShadow = "0 0 15px rgba(242, 72, 11, 0.7)";
+        splashLogo.style.zIndex = "2";
+        
+        // NS yazısı stili
+        const nsText = splashLogo.querySelector('span');
+        if (nsText) {
+          nsText.style.marginLeft = "4px";
+          nsText.style.fontSize = "26px";
+          nsText.style.fontWeight = "900";
+          nsText.style.color = "#f2480b";
+          nsText.style.textShadow = "0 0 15px rgba(242, 72, 11, 0.7)";
+        }
+      }
+      
+      // Yükleme yazısının konumunu sabitleme
+      if (loadingText) {
+        loadingText.innerHTML = "YÜKLENİYOR...";
+        loadingText.style.whiteSpace = "nowrap";
+        loadingText.style.overflow = "visible";
+        loadingText.style.transform = "none";
+        loadingText.style.left = "0";
+        
+        // Yükleme simülasyonu için hız kontrolü
+        const simulateLoading = () => {
+          if (percent < 100) {
+            // Gerçekçi yükleme hızı simulasyonu (başta hızlı, sonra yavaşlar)
+            let increment = 1;
+            if (percent < 20) increment = 2;
+            else if (percent > 80) increment = 0.5;
+            
+            percent = Math.min(100, percent + increment);
+            
+            // UI güncelleme
+            progressBar.style.width = percent + '%';
+            progressPercent.textContent = Math.round(percent) + '%';
+            
+            // Sonraki frame için zamanlama
+            const delay = percent < 80 ? 30 : 50; // Sona doğru yavaşlat
+            setTimeout(simulateLoading, delay);
+          } else {
+            // Yükleme tamamlandı
+            loadingText.textContent = "TAMAMLANDI!";
+          }
+        };
+        
+        // Simülasyonu başlat
+        setTimeout(simulateLoading, 500);
+      }
+    });
+    
+    window.addEventListener('load', function() {
+      setTimeout(function() {
+        const splashScreen = document.getElementById('splashScreen');
+        if (splashScreen) {
+          splashScreen.style.opacity = '0';
+          splashScreen.style.visibility = 'hidden';
+          
+          setTimeout(function() {
+            splashScreen.remove();
+            document.body.classList.add('loaded');
+          }, 800);
+        }
+      }, 3500);
+    });
+
+    // Tarayıcı ortamını kontrol etme ve uygun yükleme modunu kullanma
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('Sayfa yüklendi, ortam kontrol ediliyor...');
+      
+      // Dosya sisteminden mi yoksa sunucudan mı açıldığını kontrol et
+      const isFileProtocol = window.location.protocol === 'file:';
+      console.log('Dosya protokolü mü?', isFileProtocol);
+      
+      // Dosya protokolünde fetch çalışmayacağı için alternatif yöntem kullan
+      if (isFileProtocol) {
+        // Tarayıcıyı uyar (sadece console.warn mesajı)
+        console.warn('Dosya sisteminden açıldığında dil değiştirme için alternatif metod kullanılıyor.');
+        
+        // Mesaj gösterilmeyecek
+        // setTimeout(function() {
+        //   alert('Bu web sayfası bir sunucu üzerinden açılmadığı için dil değiştirme özelliği çalışmayabilir. En iyi deneyim için lütfen bu sayfayı bir web sunucusu üzerinden açın (örn. http://localhost:5173/ veya benzeri).');
+        // }, 1000);
+        
+        // Dil değiştiricisini yüklemek için setupLanguageSwitcher fonksiyonunu doğrudan çağır
+        if (typeof setupLanguageSwitcher === 'function') {
+          setupLanguageSwitcher();
+        }
+      }
+    });
+  </script>
+</head>
+<body>
+  <!-- Scroll İlerleme Çubuğu -->
+  <div class="scroll-progress-container">
+    <div class="scroll-progress-bar"></div>
+  </div>
+  
+  <!-- Fare İzleyici Elementi -->
+  <div class="cursor-follower"></div>
+  
+  <!-- Arka Plan Parçacık Efekti -->
+  <div class="particles-container"></div>
+
+  <div id="splashScreen">
+    <div class="splash-3d-container">
+      <div class="splash-3d-plane"></div>
+      <div class="splash-3d-plane"></div>
+      <div class="splash-3d-plane"></div>
+      <div class="splash-3d-plane"></div>
+      <div class="splash-3d-plane"></div>
+      <div class="splash-3d-plane"></div>
+    </div>
+    
+    <div class="splash-particles">
+      <div class="splash-particle"></div>
+      <div class="splash-particle"></div>
+      <div class="splash-particle"></div>
+      <div class="splash-particle"></div>
+      <div class="splash-particle"></div>
+      <div class="splash-particle"></div>
+      <div class="splash-particle"></div>
+      <div class="splash-particle"></div>
+    </div>
+    
+    <div class="splash-circle"></div>
+    <div class="splash-circle"></div>
+    <div class="splash-circle"></div>
+    
+    <div class="splash-logo-container">
+      <div class="splash-logo">
+        <div class="logo-icon">💻</div>
+        <span>MD</span>
+      </div>
+    </div>
+    
+    <div class="splash-progress">
+      <div class="splash-progress-bar"></div>
+      <span class="splash-progress-percent">0%</span>
+    </div>
+    
+    <div class="splash-text" data-i18n="loading.text">YÜKLENİYOR...</div>
+  </div>
+
+  <nav>
+    <div class="nav__logo"><a href="#">Muhammed <span>DURMUŞ</span></a></div>
+    <div class="nav__links">
+      <a href="#about" class="nav__link" data-i18n="nav.about">Hakkımda</a>
+      <a href="#skills" class="nav__link" data-i18n="nav.skills">Beceriler</a>
+      <a href="#services" class="nav__link" data-i18n="nav.services">Yeterlilikler</a>
+      <a href="#projects" class="nav__link" data-i18n="nav.projects">Projeler</a>
+      <a href="#education" class="nav__link" data-i18n="nav.education">Eğitim</a>
+      <a href="#contact" class="nav__link" data-i18n="nav.contact">İletişim</a>
+      <div class="nav-language-selector">
+        <button class="nav-language-btn" data-lang="tr"><span class="flag-icon">🇹🇷</span> TR</button>
+        <span>|</span>
+        <button class="nav-language-btn" data-lang="en"><span class="flag-icon">🇬🇧</span> EN</button>
+      </div>
+    </div>
+    <div class="hamburger" aria-label="Menü">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </nav>
+
+  <header>
+    <div class="video-background">
+      <video autoplay muted loop id="background-video">
+        <!-- Video kaynağı JavaScript içinde ekleniyor -->
+      </video>
+      <div class="video-overlay" style="background: linear-gradient(to bottom, rgba(9, 12, 16, 0.7), rgba(9, 12, 16, 0.65)); opacity: 0.85;"></div>
+    </div>
+    <div class="section__container header__container">
+      <div class="header__content" data-aos="fade-right" style="z-index: 5; position: relative;">
+        <h1>
+          <span data-i18n="header.greeting" style="color: #fff;">Merhaba</span>
+          <span data-i18n="header.im" style="color: #f2480b;">Ben</span>
+          <span>Muhammed</span>
+        </h1>
+        <h2 class="section__title" data-i18n="header.title" style="color: #fff; text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);">
+          Yazılım Mühendisliği <span>Öğrencisi</span>
+        </h2>
+      <p data-i18n="header.description" style="color: #fff; text-shadow: 0 0 8px rgba(0, 0, 0, 0.8);">
+        Atatürk üniversitesi yazılım mühendisliği öğrencisiyim.
+         Aviyonik lideri olduğum MTKayra kulübünde çeşitli faliyetlerde bulunmaktayım.Ekibimle birlikte Teknofestte ulusal ve uluslararası 
+         yarışmalarda birincilik elde etmek ve türkiye savunma sanayiine katkı sağlamak en büyük hedefimdir.
+      </p>
+      <div class="action__btns">
+        <button class="btn" data-i18n="header.contact">İletişime Geç</button>
+        <a href="https://github.com/MuhammedDurmus?tab=repositories" class="video" target="_blank" rel="noopener">
+          <div class="video__icon">
+            <i class="fab fa-github"></i>
+          </div>
+          <span data-i18n="header.github">GitHub Profilim</span>
+        </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="about" id="about">
+    <div class="section__container about__container">
+      <div class="about__image" data-aos="fade-right">
+        <img src="./2.jpeg" alt="Muhammed durmuş" loading="lazy" width="400" height="auto">
+      </div>
+      <div class="about__content" data-aos="fade-left">
+        <h2 class="section__title" data-i18n="about.title">Hakkımda</h2>
+        <p class="section__subtitle" data-i18n="about.subtitle">Yazılım Mühendisi</p>
+        <p class="about__details" data-i18n="about.description">
+          Yazılım Mühendisliği öğrencisiyim ve akademik eğitimimin yanı sıra özellikle görüntü işleme alanında derinleşerek bu alanda uzmanlaşmayı hedefliyorum. Gömülü sistemler üzerine yoğunlaşan çalışmalarım sayesinde Arduino, sensör entegrasyonları ve mikrodenetleyici tabanlı projeler konusunda önemli bir deneyim kazandım. Aynı zamanda haberleşme protokolleri ve sistemler arası veri iletimi gibi konularda da uygulamalı bilgi sahibiyim.
+
+MTKayra adlı teknoloji kulübünde Aviyonik Lideri olarak aktif rol alıyor; burada hava savunma sistemleri ve insansız kara aracı (İKA) projeleri geliştiriyoruz. Bu kapsamda takım içi koordinasyonun sağlanması, alt sistemlerin entegrasyonu ve projenin uçtan uca takibi gibi görevleri yürütüyorum. Liderlik görevim sayesinde hem teknik hem de yönetimsel becerilerimi geliştirme fırsatı buldum. Takım çalışması, zaman yönetimi, kaynak planlaması ve teknik dokümantasyon gibi konularda aktif görev almam, beni disiplinli ve çözüm odaklı bir mühendis adayı haline getirdi.
+        </p>
+        <div class="skills">
+          <div class="skills__section">
+            <h3 data-i18n="about.contact">İletişim</h3>
+            <ul>
+              <li><i class="fas fa-envelope"></i> <a href="muhammedurmus04@gmail.com" aria-label="Email Adresi">muhammedurmus04@gmail.com</a></li>
+              <li><i class="fab fa-github"></i> <a href="https://github.com/MuhammedDurmus?tab=repositories" target="_blank" rel="noopener" aria-label="GitHub Hesabı">github.com/nurullahsahinn</a></li>
+              <li><i class="fab fa-linkedin"></i> <a href="https://www.linkedin.com/in/muhammed-durmu%C5%9F-6716a4299/" target="_blank" rel="noopener" aria-label="LinkedIn Hesabı">linkedin.com/in/nurullahsahinn</a></li>
+
+            </ul>
+          </div>
+          
+          <!-- Eğitim Bilgileri kaldırıldı -->
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="skills-section" id="skills">
+    <div class="section__container" data-aos="fade-up">
+      <h2 class="section__title" data-i18n="skills.title">Beceriler ve <span>Yetenekler</span></h2>
+      <div class="skills__grid">
+        <div class="skills__card" data-aos="zoom-in" data-aos-delay="100">
+          <h3 data-i18n="skills.technical">Teknik Beceriler</h3>
+          <ul>
+            <li data-i18n="skills.technical.python">Python</li>
+            <li data-i18n="skills.technical.c">C / C++ / C#</li>
+            <li data-i18n="skills.technical.web">HTML / CSS / JavaScript</li>
+            <li data-i18n="skills.technical.mysql">MySQL</li>
+            <li data-i18n="skills.technical.linux">TEMEL LİNUX BİLGİSİ</li>
+            <li data-i18n="skills.technical.git">GİT / GITHUB</li>
+            <li data-i18n="skills.technical.hackintosh">Gömülü Sistemler</li>
+          </ul>
+        </div>
+        <div class="skills__card" data-aos="zoom-in" data-aos-delay="200">
+          <h3 data-i18n="skills.personal">Kişisel Beceriler</h3>
+          <ul>
+            <li data-i18n="skills.personal.time">Zaman yönetimi</li>
+            <li data-i18n="skills.personal.team">Ekip çalışması</li>
+            <li data-i18n="skills.personal.analytical">Analitik Düşünme</li>
+            <li data-i18n="skills.personal.innovation">İnovatif Yaklaşım</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="service" id="services">
+    <div class="section__container service__container" data-aos="fade-up">
+      <p class="section__subtitle" data-i18n="services.subtitle">Uzmanlık Alanlarım</p>
+      <h2 class="section__title" data-i18n="services.title"><span>Teknik</span> Yetenekler</h2>
+      <div class="service__grid">
+        <div class="service__card" data-aos="fade-up" data-aos-delay="100">
+          <div class="service__icon">
+            <i class="fas fa-laptop-code"></i>
+          </div>
+          <h4 data-i18n="services.dev.title">Yazılım Geliştirme</h4>
+          <p data-i18n="services.dev.description">
+            Python, C++, C#, ve JavaScript dilleri ile web teknolojileri, gömülü sistem, görüntü işleme konusunda deneyim.
+          </p>
+        </div>
+        <div class="service__card" data-aos="fade-up" data-aos-delay="200">
+          <div class="service__icon">
+            <i class="fas fa-apple"></i>
+          </div>
+          <h4 data-i18n="services.hackintosh.title">Görüntü İşleme ve Yapay Zeka Entegrasyonu</h4>
+          <p data-i18n="services.hackintosh.description">
+            OpenCV ve benzeri kütüphanelerle gerçek zamanlı görüntü işleme uygulamaları geliştirme, renk ve nesne tespiti, YOLO gibi modellerle akıllı sistemler tasarlama.
+          </p>
+        </div>
+        <div class="service__card" data-aos="fade-up" data-aos-delay="300">
+          <div class="service__icon">
+            <i class="fas fa-desktop"></i>
+          </div>
+          <h4 data-i18n="services.hardware.title">Takım ve Proje Yönetimi</h4>
+          <p data-i18n="services.hardware.description">
+            Aviyonik liderliği kapsamında teknik ekip yönetimi, görev dağılımı, zaman planlaması ve proje takibi konularında etkin rol alma.
+          </p>
+        </div>
+        <div class="service__card" data-aos="fade-up" data-aos-delay="400">
+          <div class="service__icon">
+            <i class="fas fa-database"></i>
+          </div>
+          <h4 data-i18n="services.database.title">Savunma Teknolojileri ve Otonom Sistem Tasarımı</h4>
+          <p data-i18n="services.database.description">
+            Hava savunma sistemleri ve insansız kara araçları üzerinde Ar-Ge yapma, sistem tasarımı, test ve entegrasyon süreçlerine hâkimiyet.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="project" id="projects">
+    <div class="section__container project__container" data-aos="fade-up">
+      <p class="section__subtitle" data-i18n="projects.subtitle">Projelerim</p>
+      <h2 class="section__title" data-i18n="projects.title"><span>Son</span> Projelerim</h2>
+      <div class="project__grid">
+        <div class="project__card" data-aos="flip-left" data-aos-delay="100">
+          <img src="./modeluydu.jpg" alt="Model Uydu Projesi" loading="lazy" width="400" height="220">
+          <div class="project__content">
+            <h3 data-i18n="projects.satellite.title">Hava Savunma Sistemleri</h3>
+            <p data-i18n="projects.satellite.description">
+TEKNOFEST yarışmaları kapsamında, ekip arkadaşlarımla birlikte otonom çalışan bir hava savunma sistemi geliştirdik. Bu projede; dost-düşman ayrımı yapabilen, renk ve şekil tanıma algoritmalarıyla hedef tespiti gerçekleştiren, servo motorlarla yönlendirme yapabilen entegre bir sistem tasarladık. Görüntü işleme teknolojileri, mikrodenetleyici tabanlı kontrol sistemleri ve gerçek zamanlı karar mekanizmaları üzerinde çalıştık. Projede aynı zamanda sistem mimarisinin oluşturulması, görev dağılımının planlanması ve alt ekiplerin koordinasyonunda aktif rol aldım. Yazılım, donanım ve mekanik ekiplerinin birlikte uyumlu çalışmasını sağlayarak, prototipin başarılı şekilde test edilmesini sağladık. Bu süreçte liderlik, teknik problem çözme ve proje yönetimi konularında önemli tecrübeler edindim.</p>
+          </div>
+        </div>
+        <div class="project__card" data-aos="flip-right" data-aos-delay="200">
+          <img src="./sualtı.jpg" alt="Otonom Sualtı Aracı" loading="lazy" width="400" height="220">
+          <div class="project__content">
+            <h3 data-i18n="projects.underwater.title">Otonom Sualtı Aracı</h3>
+            <p data-i18n="projects.underwater.description">TEKNOFEST yarışmaları çerçevesinde geliştirdiğimiz İnsansız Kara Aracı (İKA) projesinde, otonom hareket kabiliyeti, çevresel algılama ve karar verme sistemleri üzerine çalıştık. Projede aracın belirlenen rotaları takip edebilmesi, engellerden kaçınabilmesi ve görev tabanlı hareketler gerçekleştirebilmesi için çeşitli sensörler (ultrasonik, kızılötesi, IMU vb.) entegre edildi. Araç, GPS ve pusula modülleri sayesinde konumunu tespit edip hedef bölgelere yönlenebilecek şekilde tasarlandı. Görüntü işleme desteği ile renkli hedef tanıma ve sınıflandırma yeteneği kazandırıldı.
+Bu süreçte görevim; sensör entegrasyonu, veri toplama ve analiz, yazılım geliştirme ile birlikte alt sistemlerin birbiriyle uyumlu şekilde çalışmasını sağlamaktı. Ayrıca proje planlaması, takım içi koordinasyon ve teknik dökümantasyon konularında aktif rol üstlendim. Bu proje sayesinde otonom sistem tasarımı, gömülü yazılım geliştirme ve mühendislik ekipleriyle senkronize çalışabilme gibi alanlarda derinlemesine deneyim edindim.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Eğitim Bölümü -->
+  <section class="education" id="education">
+    <!-- Arkaplan şekilleri -->
+    <div class="education-bg-shape"></div>
+    <div class="education-bg-shape"></div>
+    
+    <div class="section__container education__container" data-aos="fade-up">
+      <p class="section__subtitle" data-i18n="education.subtitle">Akademik Geçmişim</p>
+      <h2 class="section__title" data-i18n="education.title">Eğitim <span>Bilgilerim</span></h2>
+      <div class="education-timeline" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;">
+        <!-- Atatürk Üniversitesi -->
+        <div class="education-item" data-aos="fade-up" data-aos-delay="100" style="flex: 1; min-width: 250px; max-width: 300px; margin-bottom: 20px;">
+          <div class="education-logo" style="width: 80px; height: 80px; border-radius: 50%; margin: 0 auto 20px auto; border: 3px solid #f2480b; overflow: hidden;">
+            <img src="./atauni1957_logo.jpeg" alt="Atatürk Üniversitesi" loading="lazy" style="width: 100%; height: 100%; object-fit: cover;">
+          </div>
+          <div class="education-content" style="background: rgba(20, 25, 30, 0.6); padding: 1.5rem; border-radius: 15px; text-align: center; border-top: 3px solid #f2480b;">
+            <h4 data-i18n="education.atauni.name" style="color: #f2480b; font-size: 1.1rem; font-weight: 600; margin-bottom: 10px;">Atatürk Üniversitesi</h4>
+            <p class="education-degree" data-i18n="education.atauni.degree" style="color: #f2f2f2; font-size: 0.9rem; margin-bottom: 10px;">Lisans Derecesi · Yazılım Mühendisliği</p>
+            <p class="education-year" data-i18n="education.atauni.year" style="font-size: 0.8rem; color: #f2480b; padding: 0.25rem 0.75rem; border-radius: 20px; background: rgba(242, 72, 11, 0.1); display: inline-block; margin-top: 5px;">2023 - Halen</p>
+          </div>
+        </div>
+      
+       
+        
+        <!-- Azərbaycan Texniki Universiteti -->
+        <div class="education-item" data-aos="fade-up" data-aos-delay="400" style="flex: 1; min-width: 250px; max-width: 300px; margin-bottom: 20px;">
+          <div class="education-logo" style="width: 80px; height: 80px; border-radius: 50%; margin: 0 auto 20px auto; border: 3px solid #f2480b; overflow: hidden;">
+            <img src="./iste.png" alt="Azərbaycan Texniki Universiteti" loading="lazy" style="width: 100%; height: 100%; object-fit: cover;">
+          </div>
+          <div class="education-content" style="background: rgba(20, 25, 30, 0.6); padding: 1.5rem; border-radius: 15px; text-align: center; border-top: 3px solid #f2480b;">
+            <h4 data-i18n="education.aztu.name" style="color: #f2480b; font-size: 1.1rem; font-weight: 600; margin-bottom: 10px;">Konya Teknik Universitesi</h4>
+            <p class="education-degree" data-i18n="education.aztu.degree" style="color: #f2f2f2; font-size: 0.9rem; margin-bottom: 10px;">Lisans Derecesi · Yazılım Mühendisliği</p>
+            <p class="education-year" data-i18n="education.aztu.year" style="font-size: 0.8rem; color: #f2480b; padding: 0.25rem 0.75rem; border-radius: 20px; background: rgba(242, 72, 11, 0.1); display: inline-block; margin-top: 5px;">2022 - 2023</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer id="contact">
+    <div class="section__container footer__container">
+      <div class="footer__content" data-aos="fade-right">
+        <h2 class="section__title" data-i18n="contact.title">İletişime <span>Geç!</span></h2>
+        <p class="section__subtitle" data-i18n="contact.subtitle">Projeleriniz için benimle iletişime geçebilirsiniz</p>
+        <div class="footer__details">
+          <p data-i18n="contact.description">
+            Benimle iletişime geçmek için aşağıdaki formu kullanabilir veya
+            sosyal medya hesaplarımdan bana ulaşabilirsiniz.
+          </p>
+        </div>
+        <div class="social__icons">
+          <a href="https://github.com/nurullahsahinn" class="icon" target="_blank" rel="noopener" aria-label="GitHub"><i class="fab fa-github"></i></a>
+          <a href="https://linkedin.com/in/nurullahsahinn" class="icon" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          <a href="https://www.youtube.com/@_nurullahsahin" class="icon" target="_blank" rel="noopener" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+      <form class="footer__form" id="contactForm" action="https://formspree.io/f/xgegplvk" method="POST" data-aos="fade-left">
+        <input type="text" name="name" placeholder="Adınız" required autocomplete="name" data-i18n="contact.form.name">
+        <input type="email" name="email" placeholder="E-posta Adresiniz" required autocomplete="email" data-i18n="contact.form.email">
+        <textarea cols="30" rows="10" name="message" placeholder="Mesajınız" required data-i18n="contact.form.message"></textarea>
+        <button type="submit" class="btn" data-i18n="contact.form.submit">Mesaj Gönder</button>
+      </form>
+    </div>
+  </footer>
+  <div class="back-to-top" aria-label="Sayfa başına dön">
+    <i class="fas fa-arrow-up"></i>
+  </div>
+
+  <script>
+    // AOS başlatma fonksiyonu
+    function initAOS() {
+      if (typeof AOS !== 'undefined') {
+        AOS.init({
+          duration: 800,
+          offset: 120,
+          once: false,
+          disable: false,
+          easing: 'ease-in-out',
+          delay: 100
+        });
+      }
+    }
+
+    // Sayfa yüklendiğinde AOS'u başlat
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('DOM yüklendi, AOS başlatılıyor...');
+      initAOS();
+    });
+
+    // Yükleme ekranı kaldırıldığında AOS'u yeniden başlat
+    window.addEventListener('load', function() {
+      console.log('Sayfa tamamen yüklendi...');
+      
+      setTimeout(function() {
+        const splashScreen = document.getElementById('splashScreen');
+        if (splashScreen) {
+          console.log('Yükleme ekranı kaldırılıyor...');
+          splashScreen.style.opacity = '0';
+          splashScreen.style.visibility = 'hidden';
+          
+          setTimeout(function() {
+            splashScreen.remove();
+            document.body.classList.add('loaded');
+            console.log('AOS yeniden başlatılıyor...');
+            if (typeof AOS !== 'undefined') {
+              AOS.refresh();
+              initAOS();
+            }
+          }, 800);
+        }
+      }, 3500);
+    });
+
+    // Sayfa yeniden boyutlandığında AOS'u yenile
+    window.addEventListener('resize', function() {
+      if (typeof AOS !== 'undefined') {
+        AOS.refresh();
+      }
+    });
+  </script>
+
+  <!-- Görsel Efektler Script -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Scroll İlerleme Çubuğu
+      window.addEventListener('scroll', function() {
+        const totalHeight = document.body.scrollHeight - window.innerHeight;
+        const progress = (window.pageYOffset / totalHeight) * 100;
+        document.querySelector('.scroll-progress-bar').style.width = progress + '%';
+      });
+
+      // Fare İzleyici Efekti
+      const cursorFollower = document.querySelector('.cursor-follower');
+      let mouseX = 0, mouseY = 0;
+      let cursorX = 0, cursorY = 0;
+
+      // Fare pozisyonunu güncelleyen fonksiyon
+      document.addEventListener('mousemove', function(e) {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        cursorFollower.style.opacity = '1';
+      });
+
+      // Link ve butonlar üzerinde fare efektini büyüt
+      const hoverElements = document.querySelectorAll('a, button, .btn, .nav__link, .service__card, .project__card, .skills__card, .video, .icon');
+      
+      hoverElements.forEach(element => {
+        element.addEventListener('mouseenter', () => {
+          cursorFollower.style.width = '50px';
+          cursorFollower.style.height = '50px';
+          cursorFollower.style.background = 'rgba(242, 72, 11, 0.2)';
+        });
+        
+        element.addEventListener('mouseleave', () => {
+          cursorFollower.style.width = '20px';
+          cursorFollower.style.height = '20px';
+          cursorFollower.style.background = 'rgba(242, 72, 11, 0.5)';
+        });
+      });
+
+      // Fare izleyiciyi animasyon ile güncelle
+      function animateCursor() {
+        const dx = mouseX - cursorX;
+        const dy = mouseY - cursorY;
+        
+        cursorX += dx * 0.1;
+        cursorY += dy * 0.1;
+        
+        if (cursorFollower) {
+          cursorFollower.style.transform = `translate(${cursorX}px, ${cursorY}px) translate(-50%, -50%)`;
+        }
+        
+        requestAnimationFrame(animateCursor);
+      }
+      
+      animateCursor();
+
+      // Tıklama Splash Efekti
+      document.addEventListener('click', function(e) {
+        // Sadece mobil olmayan cihazlarda göster
+        if (window.innerWidth > 768) {
+          // Yeni splash elementi oluştur
+          const splash = document.createElement('div');
+          splash.className = 'click-splash';
+          
+          // Pozisyonu ayarla
+          splash.style.left = e.clientX + 'px';
+          splash.style.top = e.clientY + 'px';
+          splash.style.width = '100px';
+          splash.style.height = '100px';
+          
+          // Sayfaya ekle
+          document.body.appendChild(splash);
+          
+          // Animasyon bitince elementi kaldır
+          setTimeout(() => {
+            splash.remove();
+          }, 800);
+        }
+      });
+
+      // Mobil cihaz kontrolü
+      const isMobile = window.innerWidth <= 768;
+      
+      // Tıklama dalga efekti
+      function createBubble(e) {
+        // Video arkaplanına tıklandığında dalga efektini oluşturma
+        // Böylece parti modunu engellemez
+        if (e.target.closest('.video-background') || 
+            e.target.closest('.video-particles-container')) {
+          // Video arkaplanına tıklandığında dalga oluşturma
+          console.log('Video arkaplanına tıklandı, dalga oluşturulmadı');
+          return;
+        }
+        
+        // Diğer alanlara tıklandığında dalga efekti oluştur
+        const bubble = document.createElement('div');
+        bubble.className = 'water-bubble';
+        
+        // Rastgele boyut (20-40px)
+        const size = Math.random() * 20 + 20;
+        
+        bubble.style.width = size + 'px';
+        bubble.style.height = size + 'px';
+        bubble.style.left = e.clientX + 'px';
+        bubble.style.top = e.clientY + 'px';
+        
+        document.body.appendChild(bubble);
+        
+        setTimeout(() => {
+          bubble.remove();
+        }, 2000);
+      }
+      
+      document.addEventListener('click', createBubble);
+
+      // Mobil cihazlar için özel işlemler
+      if (isMobile) {
+        // Sayfa genelinde dokunma dalga efektlerini etkinleştir
+        let touchFollower = null;
+        let touchRipples = [];
+        let touchAnimationFrame = null;
+        
+        document.body.addEventListener('touchstart', function(e) {
+          // Video arkaplanına dokunulduğunda dalga efektini oluşturma
+          if (e.target.closest('.video-background') || 
+              e.target.closest('.video-particles-container')) {
+            console.log('Video arkaplanına dokunuldu, takip efekti oluşturulmadı');
+            return;
+          }
+          
+          // Takipçiyi oluştur
+          if (!touchFollower) {
+            touchFollower = document.createElement('div');
+            touchFollower.className = 'touch-follower';
+            touchFollower.style.position = 'fixed';
+            touchFollower.style.width = '30px';
+            touchFollower.style.height = '30px';
+            touchFollower.style.borderRadius = '50%';
+            touchFollower.style.background = 'radial-gradient(circle, rgba(242, 72, 11, 0.7) 0%, rgba(242, 72, 11, 0.3) 70%)';
+            touchFollower.style.boxShadow = '0 0 10px rgba(242, 72, 11, 0.5)';
+            touchFollower.style.pointerEvents = 'none';
+            touchFollower.style.zIndex = '9999';
+            touchFollower.style.transform = 'translate(-50%, -50%)';
+            touchFollower.style.transition = 'transform 0.05s linear, width 0.2s ease, height 0.2s ease';
+            document.body.appendChild(touchFollower);
+          }
+          
+          // Dokunma noktasını al
+          const touch = e.touches[0];
+          const x = touch.clientX;
+          const y = touch.clientY;
+          
+          // Takipçiyi güncelle
+          touchFollower.style.left = x + 'px';
+          touchFollower.style.top = y + 'px';
+          touchFollower.style.opacity = '1';
+          
+          // Dokunulan noktada küçük bir ripple oluştur
+          const ripple = document.createElement('div');
+          ripple.className = 'touch-ripple-small';
+          ripple.style.position = 'fixed';
+          ripple.style.left = x + 'px';
+          ripple.style.top = y + 'px';
+          ripple.style.width = '10px';
+          ripple.style.height = '10px';
+          ripple.style.borderRadius = '50%';
+          ripple.style.background = 'rgba(242, 72, 11, 0.8)';
+          ripple.style.transform = 'translate(-50%, -50%) scale(1)';
+          ripple.style.opacity = '0.8';
+          ripple.style.pointerEvents = 'none';
+          ripple.style.zIndex = '9998';
+          document.body.appendChild(ripple);
+          
+          // Ripple animasyonu
+          touchRipples.push({
+            element: ripple,
+            createdAt: Date.now(),
+            duration: 600
+          });
+          
+          // Animasyon fonksiyonu başlat
+          if (!touchAnimationFrame) {
+            animateTouchRipples();
+          }
+        }, {passive: true});
+        
+        // Parmak hareketi takibi - çok daha hızlı
+        document.body.addEventListener('touchmove', function(e) {
+          // Video arkaplanına dokunulduğunda efekti geçersiz kıl
+          if (e.target.closest('.video-background') || 
+              e.target.closest('.video-particles-container')) {
+            return;
+          }
+          
+          if (touchFollower) {
+            const touch = e.touches[0];
+            const x = touch.clientX;
+            const y = touch.clientY;
+            
+            // Doğrudan konum güncelleme (transition olmadan)
+            touchFollower.style.left = x + 'px';
+            touchFollower.style.top = y + 'px';
+            
+            // Her harekette küçük parçacıklar bırak
+            if (Math.random() < 0.3) { // Her 3 hareketten birinde
+              const particle = document.createElement('div');
+              particle.className = 'touch-particle';
+              particle.style.position = 'fixed';
+              particle.style.left = (x + (Math.random() * 20 - 10)) + 'px';
+              particle.style.top = (y + (Math.random() * 20 - 10)) + 'px';
+              particle.style.width = Math.random() * 8 + 2 + 'px';
+              particle.style.height = particle.style.width;
+              particle.style.borderRadius = '50%';
+              particle.style.background = 'rgba(242, 72, 11, ' + (Math.random() * 0.5 + 0.2) + ')';
+              particle.style.transform = 'translate(-50%, -50%)';
+              particle.style.pointerEvents = 'none';
+              particle.style.zIndex = '9997';
+              document.body.appendChild(particle);
+              
+              // Parçacık animasyonu
+              touchRipples.push({
+                element: particle,
+                createdAt: Date.now(),
+                duration: 400
+              });
+            }
+          }
+        }, {passive: true});
+        
+        // Dokunma bitince
+        document.body.addEventListener('touchend', function(e) {
+          // Video arkaplanına dokunulduğunda efekti geçersiz kıl
+          if (e.target && (e.target.closest('.video-background') || 
+              e.target.closest('.video-particles-container'))) {
+            return;
+          }
+          
+          if (touchFollower) {
+            // Son konum effekti
+            const finalRipple = document.createElement('div');
+            finalRipple.className = 'touch-ripple-end';
+            finalRipple.style.position = 'fixed';
+            finalRipple.style.left = touchFollower.style.left;
+            finalRipple.style.top = touchFollower.style.top;
+            finalRipple.style.width = '40px';
+            finalRipple.style.height = '40px';
+            finalRipple.style.borderRadius = '50%';
+            finalRipple.style.background = 'radial-gradient(circle, rgba(242, 72, 11, 0.6) 0%, rgba(242, 72, 11, 0) 70%)';
+            finalRipple.style.transform = 'translate(-50%, -50%) scale(0)';
+            finalRipple.style.pointerEvents = 'none';
+            finalRipple.style.zIndex = '9996';
+            document.body.appendChild(finalRipple);
+            
+            // Final ripple animasyonu
+            touchRipples.push({
+              element: finalRipple,
+              createdAt: Date.now(),
+              duration: 500,
+              endAnimation: true
+            });
+            
+            // Takipçiyi kaldır
+            setTimeout(() => {
+              if (touchFollower) {
+                touchFollower.style.opacity = '0';
+                setTimeout(() => {
+                  if (touchFollower) {
+                    touchFollower.remove();
+                    touchFollower = null;
+                  }
+                }, 200);
+              }
+            }, 100);
+          }
+        }, {passive: true});
+        
+        // Ripple ve parçacık animasyonlarını yönet
+        function animateTouchRipples() {
+          const now = Date.now();
+          let hasActiveRipples = false;
+          
+          touchRipples.forEach((ripple, index) => {
+            const elapsed = now - ripple.createdAt;
+            const progress = Math.min(elapsed / ripple.duration, 1);
+            
+            if (progress < 1) {
+              hasActiveRipples = true;
+              
+              if (ripple.element.className === 'touch-ripple-small') {
+                // Küçük ripple büyüme animasyonu
+                ripple.element.style.transform = `translate(-50%, -50%) scale(${1 + progress * 2})`;
+                ripple.element.style.opacity = (0.8 * (1 - progress)).toString();
+              } else if (ripple.element.className === 'touch-particle') {
+                // Parçacık hareket ve solma animasyonu
+                ripple.element.style.transform = `translate(-50%, -50%) translate(${progress * 20}px, ${progress * 20 - 10}px)`;
+                ripple.element.style.opacity = (0.7 * (1 - progress)).toString();
+              } else if (ripple.element.className === 'touch-ripple-end') {
+                // Son ripple büyüme animasyonu
+                ripple.element.style.transform = `translate(-50%, -50%) scale(${progress * 3})`;
+                ripple.element.style.opacity = (0.6 * (1 - progress)).toString();
+              }
+            } else {
+              // Animasyon tamamlandı, elementi kaldır
+              ripple.element.remove();
+              touchRipples.splice(index, 1);
+            }
+          });
+          
+          // Hala aktif ripple'lar varsa animasyona devam et
+          if (hasActiveRipples) {
+            touchAnimationFrame = requestAnimationFrame(animateTouchRipples);
+          } else {
+            touchAnimationFrame = null;
+          }
+        }
+        
+        // Mobil için giriş animasyonları
+        const setupMobileAnimations = () => {
+          const sections = document.querySelectorAll('section');
+          
+          // Her bölüm için IntersectionObserver tanımla
+          const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('mobile-fade-in');
+                observer.unobserve(entry.target);
+              }
+            });
+          }, {
+            threshold: 0.1
+          });
+          
+          // Bölümleri gözlemle
+          sections.forEach(section => {
+            observer.observe(section);
+          });
+        };
+        
+        // Paralaks efekti oluştur
+        const setupParallaxEffect = () => {
+          const header = document.querySelector('header');
+          if (!header) return;
+          
+          // Eğer başlık bölümünde video arka planı varsa atlayalım
+          if (header.querySelector('.video-background')) return;
+          
+          // Paralaks konteyneri oluştur
+          const parallaxContainer = document.createElement('div');
+          parallaxContainer.className = 'mobile-parallax-container';
+          
+          // Paralaks katmanlarını oluştur
+          const background = document.createElement('div');
+          background.className = 'mobile-parallax-background';
+          background.style.backgroundImage = 'url("2.jpeg")';
+          background.style.opacity = '0.3';
+          
+          const middleground = document.createElement('div');
+          middleground.className = 'mobile-parallax-middleground';
+          middleground.style.backgroundImage = 'linear-gradient(135deg, rgba(242, 72, 11, 0.2), transparent)';
+          
+          const foreground = document.createElement('div');
+          foreground.className = 'mobile-parallax-foreground';
+          foreground.style.backgroundImage = 'linear-gradient(45deg, var(--dark-color), transparent)';
+          foreground.style.opacity = '0.7';
+          
+          parallaxContainer.appendChild(background);
+          parallaxContainer.appendChild(middleground);
+          parallaxContainer.appendChild(foreground);
+          
+          // Sayfaya ekle (isteğe bağlı olarak yerleştirilebilir)
+          const aboutSection = document.querySelector('#about');
+          if (aboutSection) {
+            aboutSection.insertBefore(parallaxContainer, aboutSection.firstChild);
+          }
+          
+          // Paralaks efektini etkinleştir
+          window.addEventListener('deviceorientation', function(e) {
+            if (!e.beta || !e.gamma) return;
+            
+            const tiltX = e.gamma / 10; // -10 ila 10 arası
+            const tiltY = e.beta / 10;  // -10 ila 10 arası
+            
+            background.style.transform = `translate3d(${tiltX * -2}px, ${tiltY * -2}px, 0)`;
+            middleground.style.transform = `translate3d(${tiltX * -1}px, ${tiltY * -1}px, 0)`;
+            foreground.style.transform = `translate3d(${tiltX * -0.5}px, ${tiltY * -0.5}px, 0)`;
+          });
+        };
+        
+        // Sayfa geçiş efekti
+        const setupPageTransitions = () => {
+          const transitionElement = document.createElement('div');
+          transitionElement.className = 'mobile-page-transition';
+          document.body.appendChild(transitionElement);
+          
+          // Bağlantıları dinle
+          const links = document.querySelectorAll('a[href^="#"]');
+          
+          links.forEach(link => {
+            link.addEventListener('click', (e) => {
+              const target = link.getAttribute('href');
+              
+              if (target.startsWith('#') && target !== '#') {
+                e.preventDefault();
+                
+                // Geçiş animasyonunu başlat
+                transitionElement.classList.add('active');
+                
+                // Hedef bölüme git
+                setTimeout(() => {
+                  const targetElement = document.querySelector(target);
+                  if (targetElement) {
+                    window.scrollTo({
+                      top: targetElement.offsetTop - 70,
+                      behavior: 'instant'
+                    });
+                  }
+                  
+                  // Animasyonu kapat
+                  setTimeout(() => {
+                    transitionElement.classList.remove('active');
+                  }, 100);
+                }, 300);
+              }
+            });
+          });
+        };
+        
+        // Mobil animasyonları başlat
+        setupMobileAnimations();
+        setupParallaxEffect();
+        setupPageTransitions();
+      } else {
+        // Masaüstü cihazlar için fare takibi ve diğer efektler
+        // ... existing code ...
+      }
+    });
+  </script>
+</body>
+</html>
